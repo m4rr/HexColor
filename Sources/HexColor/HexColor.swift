@@ -23,7 +23,7 @@ private func create_rgba(hex: UInt64) -> (CGFloat, CGFloat, CGFloat, CGFloat) {
 }
 
 private func parse_hex(_ str: String) -> UInt64? {
-  let hexstr = str.trimmingCharacters(in: .alphanumerics.inverted) // remove leading '#'
+  let hexstr = str.trimmingCharacters(in: CharacterSet.alphanumerics.inverted) // remove leading '#'
   let scanner = Scanner(string: hexstr)
   var hex_result: UInt64 = 0
 
@@ -62,20 +62,21 @@ public extension UIColor {
 #if canImport(SwiftUI)
 import SwiftUI
 
-@available(iOS 13.0, *)
-public extension Color {
-  init(hex: UInt64) {
-    self.init(UIColor(hex: hex))
-  }
 
-  init?(hex: String) {
-    if let color = UIColor(hex: hex) {
-      self.init(color)
-    } else {
-      return nil
-    }
-  }
-}
+//  public extension Color {
+//    init(hex: UInt64) {
+//      self.init(UIColor(hex: hex))
+//    }
+//
+//    init?(hex: String) {
+//      if let color = UIColor(hex: hex) {
+//        self.init(color)
+//      } else {
+//        return nil
+//      }
+//    }
+//  }
+
+#endif
 #endif
 
-#endif
