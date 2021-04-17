@@ -76,7 +76,9 @@ public extension UIColor {
   }
 }
 
-#if canImport(SwiftUI)
+#endif
+
+#if canImport(UIKit) && canImport(SwiftUI)
 import SwiftUI
 
 
@@ -94,6 +96,6 @@ import SwiftUI
 //    }
 //  }
 
-#endif
+
 #endif
 

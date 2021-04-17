@@ -3,7 +3,6 @@ import XCTest
 
 final class HexColorTests: XCTestCase {
 
-
   func testExample() {
 
     #if canImport(UIKit)
@@ -17,9 +16,7 @@ final class HexColorTests: XCTestCase {
     XCTAssertNotNil(testC3)
     XCTAssertEqual(testC3, appRed)
 
-    #endif
-
-    #if canImport(AppKit)
+    #elseif canImport(AppKit)
 
     let appRed = NSColor(red: 0xFF/255, green: 0x3B/255, blue: 0x30/255, alpha: 1)
     let testC2 = NSColor(hex: 0xff3b30)
@@ -27,8 +24,8 @@ final class HexColorTests: XCTestCase {
 
     XCTAssertEqual(testC2, appRed)
 
-//    XCTAssertNotNil(testC3)
-//    XCTAssertEqual(testC3, appRed)
+    XCTAssertNotNil(testC3)
+    XCTAssertEqual(testC3, appRed)
 
     #endif
 
