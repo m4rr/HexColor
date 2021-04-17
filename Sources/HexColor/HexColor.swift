@@ -2,7 +2,7 @@ import Foundation
 
 protocol HexProtocol {}
 
-extension UInt64 {
+extension UInt32 {
   var hexString: String { .init(format: "%02X", arguments: [self]) }
 
 }
@@ -12,16 +12,16 @@ extension UInt64 {
 ///   - order: order description
 ///   - hex: hex normalized to rgba a.k.a. 0xaabbccdd
 /// - Returns: description
-private func get_component(order: UInt8, from hex: UInt64) -> UInt64 {
+private func get_component(order: UInt8, from hex: UInt32) -> UInt32 {
 //  let rgb_normalized_to_rgbA = has_alpha(hex) ? hex : hex << 8 // append 00 if no alpha at the end
   let shift = order * 8
-  let mask: UInt64 = 0xff << shift
+  let mask: UInt32 = 0xff << shift
   let hex_component = (hex & mask) >> shift
 
   return hex_component
 }
 
-private func create_rgb_t<T: FloatingPoint>(hex: UInt64, of: T.Type) -> (T, T, T, T) {
+private func create_rgb_t<T: FloatingPoint>(hex: UInt32, of: T.Type) -> (T, T, T, T) {
   (
     T(get_component(order: 2, from: hex)) / 255,
     T(get_component(order: 1, from: hex)) / 255,
@@ -30,7 +30,7 @@ private func create_rgb_t<T: FloatingPoint>(hex: UInt64, of: T.Type) -> (T, T, T
   )
 }
 
-private func create_rgba_t<T: FloatingPoint>(hex: UInt64, of: T.Type) -> (T, T, T, T) {
+private func create_rgba_t<T: FloatingPoint>(hex: UInt32, of: T.Type) -> (T, T, T, T) {
   (
     T(get_component(order: 3, from: hex)) / 255,
     T(get_component(order: 2, from: hex)) / 255,
@@ -39,20 +39,20 @@ private func create_rgba_t<T: FloatingPoint>(hex: UInt64, of: T.Type) -> (T, T, 
   )
 }
 
-private func create_t<T: FloatingPoint>(hex: UInt64, of t: T.Type, has_alpha: Bool = false) -> (T, T, T, T) {
+private func create_t<T: FloatingPoint>(hex: UInt32, of t: T.Type, has_alpha: Bool = false) -> (T, T, T, T) {
   has_alpha ? create_rgba_t(hex: hex, of: t) : create_rgb_t(hex: hex, of: t)
 }
 
 /// <#Description#>
 /// - Parameter str: <#str description#>
 /// - Returns: <#description#>
-private func parse_hex(_ str: String) -> (UInt64, Bool)? {
+private func parse_hex(_ str: String) -> (UInt32, Bool)? {
   let hexstr = str.trimmingCharacters(in: CharacterSet.alphanumerics.inverted) // remove leading '#'
-  let has_alpha = (hexstr.split(separator: "x").last?.count ?? 0) > 6
+  let has_alpha = (hexstr.split(separator: "x").last?.count ?? 0) > 6 // count components after '0x'
   let scanner = Scanner(string: hexstr)
-  var hex_result: UInt64 = 0
+  var hex_result: UInt32 = 0
 
-  if scanner.scanHexInt64(&hex_result) { // parse with 0x or not
+  if scanner.scanHexInt32(&hex_result) { // parse with 0x or not
     return (hex_result, has_alpha)
   }
   return nil
@@ -64,19 +64,19 @@ import UIKit
 public extension UIColor {
   /// Creates UIColor from 0xabcdef.
   /// - Parameter hex: hex number
-  convenience init(hex: UInt64) {
+  convenience init(hex: UInt32) {
     assert(hex & 0xffffff == hex)
 
     self.init(hexRGB: hex)
   }
 
-  private convenience init(hexRGB hex: UInt64) {
+  private convenience init(hexRGB hex: UInt32) {
     let rgba = create_rgb_t(hex: hex, of: CGFloat.self)
 
     self.init(red: rgba.0, green: rgba.1, blue: rgba.2, alpha: rgba.3)
   }
 
-  convenience init(hexRGBA hex: UInt64) {
+  convenience init(hexRGBA hex: UInt32) {
     let rgba = create_rgba_t(hex: hex, of: CGFloat.self)
 
     self.init(red: rgba.0, green: rgba.1, blue: rgba.2, alpha: rgba.3)
@@ -104,7 +104,7 @@ import SwiftUI
 
 @available(iOS 13.0, *)
 public extension Color {
-  init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: UInt64) {
+  init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: UInt32) {
     let rgba = create_rgba_t(hex: hex, of: Double.self)
 
     self.init(colorSpace, red: rgba.0, green: rgba.1, blue: rgba.2, opacity: rgba.3)
