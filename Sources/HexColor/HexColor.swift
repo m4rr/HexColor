@@ -39,6 +39,23 @@ public extension UInt64 {
 
 #if canImport(AppKit)
 
+import AppKit
+
+extension NSColor {
+  convenience init(hex: uint64) {
+    let rgba = create_rgba(hex: hex)
+
+    self.init(red: rgba.0, green: rgba.1, blue: rgba.2, alpha: rgba.3)
+  }
+
+  convenience init?(hex str: String) {
+    if let hex = parse_hex(str) {
+      self.init(hex: hex)
+    }
+    return nil
+  }
+}
+
 #endif
 
 #if canImport(UIKit)
