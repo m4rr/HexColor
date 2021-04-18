@@ -14,6 +14,12 @@ public extension HexWord {
 /// `UInt8`
 typealias HexByte = UInt8
 
+/// Create an RGBA tuple from UInt32 hex value. Supports optional alpha component at the end.
+/// - Parameters:
+///   - hex: be like a `0xaabbcc` or `0xaabbcc00`.
+///   - has_alpha: if true, interpret last components of `0xaabbcc00` as alpha value. Otherwise -- the hex should be like a `0xaabbcc`.
+///   - type: type constraint. CGFloat, Double, etc.
+/// - Returns: a typed RGBA tuple of the provided type.
 func create_rgba_t<T: FloatingPoint>(hex: HexWord, has_alpha: Bool, _ type: T.Type) -> (T, T, T, T) {
   (
     T(get_component(order: has_alpha + 2, from: hex)) / 255,
@@ -23,10 +29,10 @@ func create_rgba_t<T: FloatingPoint>(hex: HexWord, has_alpha: Bool, _ type: T.Ty
   )
 }
 
-/// <#Description#>
-/// - Parameter str: <#str description#>
-/// - Returns: <#description#>
-func parse_hex(_ str: String) -> (hex: HexWord, has_alpha: Bool)? {
+/// Scanning a string in order to find there a UInt32 value.
+/// - Parameter str: Both `0xaabbcc(dd)` or `#aabbcc(dd)` supported.
+/// - Returns: A tuple with a `hex` value found in the and a `has_alpha` flag indicating if the string contains 4 of 0xFF groups.
+func scan_hex(_ str: String) -> (hex: HexWord, has_alpha: Bool)? {
   let hexstr = str.trimmingCharacters(in: CharacterSet.alphanumerics.inverted) // remove leading '#'
   let has_alpha = (hexstr.split(separator: "x").last?.count ?? 0) > 6 // count components after '0x'
   let scanner = Scanner(string: hexstr)
