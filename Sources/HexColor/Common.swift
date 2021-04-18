@@ -27,7 +27,7 @@ typealias HexByte = UInt8
 ///   - has_alpha: if true, interpret last components of `0xaabbcc00` as alpha value. Otherwise -- the hex should be like a `0xaabbcc`.
 ///   - type: type constraint. CGFloat, Double, etc.
 /// - Returns: a typed RGBA tuple of the provided type.
-func create_rgba_t<T: FloatingPoint>(hex: HexWord, has_alpha: Bool, _ type: T.Type) -> (T, T, T, T) {
+func create_rgba_t<T: FloatingPoint>(hex: HexWord, has_alpha: Bool, _ type: T.Type) -> (r: T, g: T, b: T, a: T) {
   (
     T(get_component(order: has_alpha + 2, from: hex)) / 255,
     T(get_component(order: has_alpha + 1, from: hex)) / 255,

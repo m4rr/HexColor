@@ -11,7 +11,7 @@ public extension UIColor {
     hex_assert(hex, has_alpha)
 
     let tuple = create_rgba_t(hex: hex, has_alpha: has_alpha, CGFloat.self)
-    self.init(red: tuple.0, green: tuple.1, blue: tuple.2, alpha: tuple.3)
+    self.init(red: tuple.r, green: tuple.g, blue: tuple.b, alpha: tuple.a)
   }
 
   /// Creates a UIColor from a  hex value string.
