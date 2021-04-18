@@ -17,13 +17,12 @@ final class HexColorTests: XCTestCase {
     #endif
   }
 
-
   @available(iOS 1.0, *)
   func test_iOS() {
     #if canImport(UIKit)
     let appRed = UIColor(red: 0xFF/255, green: 0x3B/255, blue: 0x30/255, alpha: 1)
     let ints: [UInt32] = [0xff3b30]
-    let ints_failed: [UInt32] = [0xff3b30ff]
+//    let ints_failed: [UInt32] = [0xff3b30ff]
     let strs = ["0xff3b30ff", "0xff3b30", "#ff3b30", "#ff3b30ff"]
 
 
@@ -79,7 +78,6 @@ final class HexColorTests: XCTestCase {
 
     #endif
   }
-
 
   @available(macOS 1.0, *)
   func test_macOS() {
