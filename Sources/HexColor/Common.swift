@@ -11,6 +11,13 @@ public extension HexWord {
 
 // MARK: - Internal
 
+func hex_assert(_ hex: HexWord, _ has_alpha: Bool) {
+  assert(has_alpha || hex & 0xffffff == hex, """
+      A `\(hex.hexString)` has been interpreted as a `\((hex & 0xffffff).hexString)` -- which is considered wrong.
+      Hex value must have only 3 of `0xFF` groups if no `has_alpha` flag provided. Or use `.init(hex: String)` instead.
+      """)
+}
+
 /// `UInt8`
 typealias HexByte = UInt8
 

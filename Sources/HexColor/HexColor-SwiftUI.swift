@@ -8,10 +8,7 @@ public extension Color {
   /// - Parameter has_alpha: If the hex parameter supposet to contain last `0x(DD)` group as an alpha component, then `has_alpha` flag has to be set to true.
   /// Default value is false.
   init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: HexWord, has_alpha: Bool = false) {
-    assert(has_alpha || hex & 0xffffff == hex, """
-      Hex value must only have 3 of `0xff` groups if no has_alpha flag provided.
-      Currently \(hex) is interpreted as \((hex & 0xffffff).hexString), which is wrong.
-      """)
+    hex_assert(hex, has_alpha)
 
     let tuple = create_rgba_t(hex: hex, has_alpha: has_alpha, Double.self)
     self.init(colorSpace, red: tuple.0, green: tuple.1, blue: tuple.2, opacity: tuple.3)
