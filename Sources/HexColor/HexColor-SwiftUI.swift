@@ -1,7 +1,7 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension Color {
 
   /// <#Description#>
@@ -15,9 +15,9 @@ public extension Color {
     let rgba = create_rgba_t(hex: hex, has_alpha: has_alpha, Double.self)
     self.init(colorSpace,
               red: rgba.0,
-              green: rgba.1,
-              blue: rgba.2,
-              opacity: rgba.3)
+            green: rgba.1,
+             blue: rgba.2,
+          opacity: rgba.3)
   }
 
   /// - Returns: black if no number found in the string (parsing failed)
