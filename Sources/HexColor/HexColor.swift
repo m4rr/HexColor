@@ -13,7 +13,6 @@ extension UInt32 {
 ///   - hex: hex normalized to rgba a.k.a. 0xaabbccdd
 /// - Returns: description
 private func get_component(order: UInt8, from hex: UInt32) -> UInt32 {
-//  let rgb_normalized_to_rgbA = has_alpha(hex) ? hex : hex << 8 // append 00 if no alpha at the end
   let shift = order * 8
   let mask: UInt32 = 0xff << shift
   let hex_component = (hex & mask) >> shift
@@ -82,20 +81,21 @@ public extension UIColor {
     self.init(red: rgba.0, green: rgba.1, blue: rgba.2, alpha: rgba.3)
   }
 
-  /// Creates UIColor from "0xabcdef", "0xabcdefaa" or "#abcdef".
-  /// - Returns: nil if no number found in the string (parsing failed)
+  /// Creates UIColor from "0xabcdef", "0xabcdef00" or "#abcdef00".
+  /// - Returns: `.black` if no number found in the string (parsing failed)
   /// - Parameter str: hex number as string
-  convenience init?(hex str: String) {
-    guard let (hex, has_alpha_component) = parse_hex(str) else {
-      return nil
-    }
-
-    if has_alpha_component {
-      self.init(hexRGBA: hex)
+  convenience init(hex str: String) {
+    if let (hex, has_alpha_component) = parse_hex(str) {
+      if has_alpha_component {
+        self.init(hexRGBA: hex)
+      } else {
+        self.init(hexRGB: hex)
+      }
     } else {
-      self.init(hexRGB: hex)
+      self.init(white: 0, alpha: 1)
     }
   }
+
 }
 #endif
 
@@ -105,17 +105,12 @@ import SwiftUI
 @available(iOS 13.0, *)
 public extension Color {
   init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: UInt32) {
-    let rgba = create_rgba_t(hex: hex, of: Double.self)
-
-    self.init(colorSpace, red: rgba.0, green: rgba.1, blue: rgba.2, opacity: rgba.3)
+    self.init(UIColor(hex: hex))
   }
 
-  init?(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: String) {
-    if let color = UIColor(hex: hex) {
-      self.init(color)
-    } else {
-      return nil
-    }
+  /// - Returns: black if no number found in the string (parsing failed)
+  init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: String) {
+    self.init(UIColor(hex: hex))
   }
 }
 #endif
