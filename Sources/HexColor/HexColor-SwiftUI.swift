@@ -9,7 +9,6 @@ public extension Color {
   /// Default value is false.
   init(_ colorSpace: Color.RGBColorSpace = .sRGB, hex: HexWord, has_alpha: Bool = false) {
     hex_assert(hex, has_alpha)
-
     let tuple = create_rgba_t(hex: hex, has_alpha: has_alpha, Double.self)
     self.init(colorSpace, red: tuple.r, green: tuple.g, blue: tuple.b, opacity: tuple.a)
   }

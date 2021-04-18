@@ -9,7 +9,6 @@ public extension UIColor {
   /// Default value is false.
   convenience init(hex: HexWord, has_alpha: Bool = false) {
     hex_assert(hex, has_alpha)
-
     let tuple = create_rgba_t(hex: hex, has_alpha: has_alpha, CGFloat.self)
     self.init(red: tuple.r, green: tuple.g, blue: tuple.b, alpha: tuple.a)
   }
